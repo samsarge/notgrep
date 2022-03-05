@@ -1,0 +1,7 @@
+This is test file
+With some example text
+Amongst different lines
+So I can search them
+
+New paragraph here
+Xxx
