@@ -26,13 +26,19 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("Not enough arguments.");
-        }
+    // take ownership of args and mutating it because we'll be iterating over it
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
+        args.next(); // first is the program name so skip that
 
-        let text_to_search: String = args[1].clone();
-        let filename: String = args[2].clone();
+        let text_to_search = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string")
+        };
+
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file name")
+        };
         // will return the Err variant of Result if the env var isnt set
         let case_sensitive: bool = env::var("CASE_INSENSITIVE").is_err();
 
